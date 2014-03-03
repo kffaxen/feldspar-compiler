@@ -89,7 +89,7 @@ library
     filepath,
     containers,
     process,
-    directory >= 1.2,
+    directory,
     template-haskell,
     plugins >= 1.5.4,
     storable-tuple  >= 0.0.2,

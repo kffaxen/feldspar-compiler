@@ -134,6 +134,7 @@ defaultProgOpts =
 targetsFromPlatform :: Platform -> [Target]
 targetsFromPlatform pf = tfp $ name pf
    where tfp "c99"       = []
+         tfp "c99i"      = []
          tfp "c99OpenMp" = []
          tfp "c99Wool"   = [Wool]
          tfp "ba"        = [BA]

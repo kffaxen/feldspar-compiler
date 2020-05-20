@@ -234,7 +234,7 @@ instance Lift Options where
         [| Options platform ph una unr frontopts sl ns |]
 
 instance Lift Platform where
-    lift (Platform n t vs is vf be) = [| Platform n t vs is vf be |]
+    lift (Platform n t vs is vf i be) = [| Platform n t vs is vf i be |]
 
 instance Lift FeldOpts where
     lift (FeldOpts ts) = [| FeldOpts ts |]

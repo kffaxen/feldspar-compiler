@@ -33,6 +33,7 @@ module Feldspar.Compiler.Internal
     , sicsOptions3
     , c99PlatformOptions
     , c99OpenMpPlatformOptions
+    , c99InlineOptions
     , tic64xPlatformOptions
     , module Internal
     ) where

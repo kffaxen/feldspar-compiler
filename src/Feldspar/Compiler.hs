@@ -19,6 +19,7 @@ module Feldspar.Compiler
     , Target(..)
     , c99PlatformOptions
     , c99OpenMpPlatformOptions
+    , c99InlineOptions
     , tic64xPlatformOptions
     , feldsparCIncludes
     ) where

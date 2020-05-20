@@ -1,52 +1,39 @@
 #include "deepArrayCopy.h"
 
 
-struct awl_awl_unsignedS32 * copyArrayPos_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * dst, int32_t dstLen, struct awl_awl_unsignedS32 * src, int32_t srcLen, int32_t pos)
+struct awl_unsignedS32 * initArray_awl_unsignedS32(struct awl_unsignedS32 * dst, uint32_t oldLen, uint32_t newLen)
 {
-  for (int32_t i = 0; i < srcLen; i += 1)
+  if ((oldLen != newLen))
   {
-    (dst[(pos + i)]).buffer = initCopyArray_awl_unsignedS32((dst[(pos + i)]).buffer, (dst[(pos + i)]).length, (src[i]).buffer, (src[i]).length);
-    (dst[(pos + i)]).length = (src[i]).length;
+    if ((oldLen < newLen))
+    {
+      dst = resizeArray(dst, sizeof(struct awl_unsignedS32), newLen);
+      for (int32_t i = oldLen; i < newLen; i += 1)
+      {
+        struct awl_unsignedS32 null_arr_0 = { 0 };
+        
+        dst[i] = null_arr_0;
+      }
+    }
+    else
+    {
+      for (int32_t i = newLen; i < oldLen; i += 1)
+      {
+        freeArray((dst[i]).buffer);
+      }
+      dst = resizeArray(dst, sizeof(struct awl_unsignedS32), newLen);
+    }
   }
   return(dst);
 }
 
-struct awl_awl_unsignedS32 * copyArray_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * dst, int32_t dstLen, struct awl_awl_unsignedS32 * src, int32_t srcLen)
-{
-  dst = copyArrayPos_awl_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
-  return(dst);
-}
-
-struct awl_awl_unsignedS32 * initCopyArray_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * dst, int32_t dstLen, struct awl_awl_unsignedS32 * src, int32_t srcLen)
-{
-  dst = initArray_awl_awl_unsignedS32(dst, dstLen, srcLen);
-  dstLen = srcLen;
-  dst = copyArrayPos_awl_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
-  return(dst);
-}
-
-struct awl_unsignedS32 * copyArrayPos_awl_unsignedS32(struct awl_unsignedS32 * dst, int32_t dstLen, struct awl_unsignedS32 * src, int32_t srcLen, int32_t pos)
+void freeArray_awl_unsignedS32(struct awl_unsignedS32 * src, int32_t srcLen)
 {
   for (int32_t i = 0; i < srcLen; i += 1)
   {
-    (dst[(pos + i)]).buffer = initCopyArray((dst[(pos + i)]).buffer, (dst[(pos + i)]).length, sizeof(uint32_t), (src[i]).buffer, (src[i]).length);
-    (dst[(pos + i)]).length = (src[i]).length;
+    freeArray((src[i]).buffer);
   }
-  return(dst);
-}
-
-struct awl_unsignedS32 * copyArray_awl_unsignedS32(struct awl_unsignedS32 * dst, int32_t dstLen, struct awl_unsignedS32 * src, int32_t srcLen)
-{
-  dst = copyArrayPos_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
-  return(dst);
-}
-
-struct awl_unsignedS32 * initCopyArray_awl_unsignedS32(struct awl_unsignedS32 * dst, int32_t dstLen, struct awl_unsignedS32 * src, int32_t srcLen)
-{
-  dst = initArray_awl_unsignedS32(dst, dstLen, srcLen);
-  dstLen = srcLen;
-  dst = copyArrayPos_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
-  return(dst);
+  freeArray(src);
 }
 
 struct awl_awl_unsignedS32 * initArray_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * dst, uint32_t oldLen, uint32_t newLen)
@@ -84,39 +71,52 @@ void freeArray_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * src, int32_t src
   freeArray(src);
 }
 
-struct awl_unsignedS32 * initArray_awl_unsignedS32(struct awl_unsignedS32 * dst, uint32_t oldLen, uint32_t newLen)
+struct awl_unsignedS32 * copyArrayPos_awl_unsignedS32(struct awl_unsignedS32 * dst, int32_t dstLen, struct awl_unsignedS32 * src, int32_t srcLen, int32_t pos)
 {
-  if ((oldLen != newLen))
+  for (int32_t i = 0; i < srcLen; i += 1)
   {
-    if ((oldLen < newLen))
-    {
-      dst = resizeArray(dst, sizeof(struct awl_unsignedS32), newLen);
-      for (int32_t i = oldLen; i < newLen; i += 1)
-      {
-        struct awl_unsignedS32 null_arr_0 = { 0 };
-        
-        dst[i] = null_arr_0;
-      }
-    }
-    else
-    {
-      for (int32_t i = newLen; i < oldLen; i += 1)
-      {
-        freeArray((dst[i]).buffer);
-      }
-      dst = resizeArray(dst, sizeof(struct awl_unsignedS32), newLen);
-    }
+    (dst[(pos + i)]).buffer = initCopyArray((dst[(pos + i)]).buffer, (dst[(pos + i)]).length, sizeof(uint32_t), (src[i]).buffer, (src[i]).length);
+    (dst[(pos + i)]).length = (src[i]).length;
   }
   return(dst);
 }
 
-void freeArray_awl_unsignedS32(struct awl_unsignedS32 * src, int32_t srcLen)
+struct awl_unsignedS32 * copyArray_awl_unsignedS32(struct awl_unsignedS32 * dst, int32_t dstLen, struct awl_unsignedS32 * src, int32_t srcLen)
+{
+  dst = copyArrayPos_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
+  return(dst);
+}
+
+struct awl_unsignedS32 * initCopyArray_awl_unsignedS32(struct awl_unsignedS32 * dst, int32_t dstLen, struct awl_unsignedS32 * src, int32_t srcLen)
+{
+  dst = initArray_awl_unsignedS32(dst, dstLen, srcLen);
+  dstLen = srcLen;
+  dst = copyArrayPos_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
+  return(dst);
+}
+
+struct awl_awl_unsignedS32 * copyArrayPos_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * dst, int32_t dstLen, struct awl_awl_unsignedS32 * src, int32_t srcLen, int32_t pos)
 {
   for (int32_t i = 0; i < srcLen; i += 1)
   {
-    freeArray((src[i]).buffer);
+    (dst[(pos + i)]).buffer = initCopyArray_awl_unsignedS32((dst[(pos + i)]).buffer, (dst[(pos + i)]).length, (src[i]).buffer, (src[i]).length);
+    (dst[(pos + i)]).length = (src[i]).length;
   }
-  freeArray(src);
+  return(dst);
+}
+
+struct awl_awl_unsignedS32 * copyArray_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * dst, int32_t dstLen, struct awl_awl_unsignedS32 * src, int32_t srcLen)
+{
+  dst = copyArrayPos_awl_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
+  return(dst);
+}
+
+struct awl_awl_unsignedS32 * initCopyArray_awl_awl_unsignedS32(struct awl_awl_unsignedS32 * dst, int32_t dstLen, struct awl_awl_unsignedS32 * src, int32_t srcLen)
+{
+  dst = initArray_awl_awl_unsignedS32(dst, dstLen, srcLen);
+  dstLen = srcLen;
+  dst = copyArrayPos_awl_awl_unsignedS32(dst, dstLen, src, srcLen, 0);
+  return(dst);
 }
 
 void deepArrayCopy(struct awl_awl_awl_unsignedS32 * v0, struct s_2_awl_awl_awl_unsignedS32_awl_awl_awl_unsignedS32 * out)

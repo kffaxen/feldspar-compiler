@@ -43,6 +43,7 @@ module Feldspar.Compiler.Compiler (
   , sicsOptions3
   , c99PlatformOptions
   , c99OpenMpPlatformOptions
+  , c99InlineOptions
   , tic64xPlatformOptions
   , SplitModule(..)
   , CompiledModule(..)
@@ -64,6 +65,7 @@ import Feldspar.Compiler.Backend.C.MachineLowering
 import Feldspar.Compiler.Backend.C.Tic64x
 import Feldspar.Compiler.Imperative.FromCore
 import Feldspar.Compiler.Imperative.ArrayOps
+import Feldspar.Compiler.Imperative.Inline
 import Feldspar.Compiler.Imperative.Representation
 import Feldspar.Core.Middleend.PassManager
 import Control.Monad (when)
@@ -121,7 +123,7 @@ compileToCCore name opts prg = compileToCCore' opts mod
 compileToCCore' :: Options -> Module () -> SplitModule
 compileToCCore' opts m = compileSplitModule opts $ splitModule mod
       where
-        mod = adaptTic64x opts $ rename opts False $ arrayOps opts m
+        mod = adaptTic64x opts $ rename opts False $inline opts $ arrayOps opts m
 
 genIncludeLines :: Options -> Maybe String -> String
 genIncludeLines opts mainHeader = concatMap include incs ++ "\n\n"
@@ -151,6 +153,9 @@ c99PlatformOptions              = defaultOptions
 c99OpenMpPlatformOptions :: Options
 c99OpenMpPlatformOptions        = defaultOptions { platform = c99OpenMp }
 
+c99InlineOptions :: Options
+c99InlineOptions                = defaultOptions { platform = c99Inline }
+
 tic64xPlatformOptions :: Options
 tic64xPlatformOptions           = defaultOptions { platform = tic64x }
 
@@ -165,6 +170,7 @@ sicsOptions3 = defaultOptions { platform = c99Wool, frontendOpts = defaultFeldOp
 
 data BackendPass = BPFromCore
                  | BPArrayOps
+                 | BPInline
                  | BPRename
                  | BPAdapt
                  | BPSplit
@@ -189,6 +195,7 @@ backend :: PassCtrl BackendPass -> Options -> String -> UntypedFeld -> ([String]
 backend ctrl opts name = evalPasses 0
                        $ codegen (codeGenerator $ platform opts) ctrl opts
                        . pc BPRename   (rename opts False)
+                       . pc BPInline   (inline opts)
                        . pc BPArrayOps (arrayOps opts)
                        . pt BPFromCore (fst . fromCoreUT opts (encodeFunctionName name))
   where pc :: Pretty a => BackendPass -> (a -> a) -> Prog a Int -> Prog a Int

@@ -56,6 +56,7 @@ data Platform = Platform {
     values          :: [(Type, ShowValue)],
     includes        :: [String],
     varFloating     :: Bool,
+    pInline         :: Bool,
     codeGenerator   :: String
 } deriving (Show)
 

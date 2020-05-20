@@ -246,6 +246,7 @@ compilerTests = testGroup "Compiler-RegressionTests"
     , mkGoldTestUT foreignEffect "foreignEffect" defaultOptions
     , mkGoldTest tuples "tuples" defaultOptions
     , mkGoldTest deepArrayCopyTest "deepArrayCopy" defaultOptions
+    , mkGoldTest deepArrayCopyTest "deepArrayCopyInline" c99InlineOptions
    -- Build tests.
     , mkBuildTest pairParam "pairParam" defaultOptions
     , mkBuildTest pairParam "pairParam_ret" nativeRetOpts
@@ -272,6 +273,7 @@ compilerTests = testGroup "Compiler-RegressionTests"
     , mkBuildTest noinline1 "noinline1" defaultOptions
     , mkBuildTest tuples "tuples" defaultOptions
     , mkBuildTest deepArrayCopyTest "deepArrayCopy" defaultOptions
+    , mkBuildTest deepArrayCopyTest "deepArrayCopyInline" c99InlineOptions
     ]
 
 externalProgramTests :: TestTree

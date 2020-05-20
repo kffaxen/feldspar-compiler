@@ -34,6 +34,7 @@ module Feldspar.Compiler.Backend.C.Platforms
     , c99
     , c99OpenMp
     , c99Wool
+    , c99Inline
     , tic64x
     , extend
     ) where
@@ -45,7 +46,7 @@ import Feldspar.Compiler.Imperative.Representation
 import Feldspar.Compiler.Imperative.Frontend
 
 availablePlatforms :: [Platform]
-availablePlatforms = [ c99, c99OpenMp, c99Wool, ba, tic64x ]
+availablePlatforms = [ c99, c99OpenMp, c99Wool, c99Inline, ba, tic64x ]
 
 platformFromName :: String -> Platform
 platformFromName str = head $ [pf | pf <- availablePlatforms, name pf == str]
@@ -86,6 +87,7 @@ c99 = Platform {
         , "<stdbool.h>"
         , "<complex.h>"],
     varFloating = True,
+    pInline = False,
     codeGenerator = "c"
 }
 
@@ -100,8 +102,14 @@ c99Wool = c99 { name = "c99Wool"
               , varFloating = False
               }
 
+c99Inline :: Platform
+c99Inline = c99 { name = "c99i"
+                , pInline = True
+                }
+
 ba :: Platform
 ba = c99 { name = "ba"
+         , pInline = True
          , codeGenerator = "ba"
          }
 
@@ -133,6 +141,7 @@ tic64x = Platform {
     includes = [ "feldspar_tic64x.h", "feldspar_array.h", "<c6x.h>", "<string.h>"
                , "<math.h>"],
     varFloating = True,
+    pInline = False,
     codeGenerator = "c"
 }
 

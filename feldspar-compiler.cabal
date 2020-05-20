@@ -41,10 +41,12 @@ library
     Feldspar.Compiler
     Feldspar.Compiler.Imperative.ArrayOps
     Feldspar.Compiler.Imperative.Representation
+    Feldspar.Compiler.Imperative.DeadFunElim
     Feldspar.Compiler.Imperative.ExternalProgram
     Feldspar.Compiler.Imperative.FromCore
     Feldspar.Compiler.Imperative.FromCore.Interpretation
     Feldspar.Compiler.Imperative.Frontend
+    Feldspar.Compiler.Imperative.Inline
     Feldspar.Compiler.Backend.C.CodeGeneration
     Feldspar.Compiler.Backend.C.Library
     Feldspar.Compiler.Backend.C.MachineLowering

@@ -34,21 +34,31 @@ module Feldspar.Compiler.Imperative.ArrayOps (arrayOps) where
 import Feldspar.Compiler.Imperative.Representation
 import Feldspar.Compiler.Imperative.Frontend
         (litI32, deepCopy, fun, call, for, toBlock, mkIf, isShallow, variant, arrayFun, freeArrayE,
-         lowerCopy, mkSequence, elemTyAwL, isAwLType)
+         lowerCopy, mkSequence, elemTyAwL, isAwLType, encodeType)
 import Feldspar.Range (fullRange)
 import Feldspar.Core.Types(Length)
 import Feldspar.Compiler.Backend.C.Options(Options)
 
-import Data.List (nub, isPrefixOf, concatMap)
+import Data.List (nub, isPrefixOf, concatMap, sortBy)
 import Control.Monad.Writer(Writer(..), runWriter, tell, censor)
+import Data.Bifunctor(bimap)
 
 -- | Main interface for adding needed array operations to a module.
 arrayOps :: Options -> Module () -> Module ()
-arrayOps opts (Module ents) = Module $ concatMap mkArrayOps dts ++ ents'
+arrayOps opts (Module ents) = Module $ concatMap mkArrayOps sdts ++ ents'
   where dts = filter (not . either isShallow isShallow) lrts
+        sdts = map (bimap snd snd) $ sortBy compFst $ map (bimap rank rank) dts
         (ents',lrts) = lower opts ents
         mkArrayOps (Left  t) = [mkInitArray opts t, mkFreeArray opts t]
         mkArrayOps (Right t) = [mkCopyArrayPos opts t, mkCopyArray opts t, mkInitCopyArray opts t]
+
+-- | Annotate a type with a measure of the size of the type
+rank :: Type -> (Int, Type)
+rank t = (length $ encodeType t, t)
+
+-- | Compare two pairs only on their first components
+compFst :: Ord a => Either (a,b) (a,b) -> Either (a,c) (a,c) -> Ordering
+compFst x y = compare (bimap fst fst x) (bimap fst fst y)
 
 -- | Copying an array to a given position in the destination
 mkCopyArrayPos :: Options -> Type -> Entity ()
